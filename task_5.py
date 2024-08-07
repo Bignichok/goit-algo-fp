@@ -10,7 +10,7 @@ class Node:
         self.right = None
         self.val = key
         self.color = color
-        self.id = str(uuid.uuid4())  # Unique identifier for each node
+        self.id = str(uuid.uuid4())
 
 
 class BinaryHeap:
@@ -114,7 +114,7 @@ class BinaryHeap:
         num_nodes = len(traversal_order)
         colors = []
         for i, index in enumerate(traversal_order):
-            color_value = i / (num_nodes - 1) if num_nodes > 1 else 1
+            color_value = i / num_nodes if num_nodes > 1 else 1
             color_hex = mcolors.to_hex(mcolors.hsv_to_rgb([color_value, 1, 1]))
             self.heap[index].color = color_hex
             colors.append(color_hex)
