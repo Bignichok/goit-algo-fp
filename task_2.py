@@ -1,51 +1,34 @@
-import turtle
-import math
+import matplotlib.pyplot as plt
+import numpy as np
 
-def draw_pythagoras_tree(t, branch_length, level):
-    if level == 0:
+def draw_pythagoras_tree(ax, x, y, angle, length, level, max_level):
+    if level > max_level:
         return
 
-    # Draw the initial square
-    for _ in range(4):
-        t.forward(branch_length)
-        t.right(90)
+    # Calculate the end points of the branch
+    x_end = x + length * np.cos(angle)
+    y_end = y + length * np.sin(angle)
+    
+    # Draw the branch
+    ax.plot([x, x_end], [y, y_end], color='brown', lw=max_level/level)
 
-    # Position the turtle for the left branch
-    t.forward(branch_length)
-    t.left(45)
-
-    # Calculate the length of the next branch
-    next_branch_length = branch_length * math.sqrt(2) / 2
+    # Calculate new branch length
+    new_length = length * np.cos(np.pi / 4)
 
     # Draw the left branch
-    draw_pythagoras_tree(t, next_branch_length, level - 1)
+    draw_pythagoras_tree(ax, x_end, y_end, angle + np.pi / 4, new_length, level + 1, max_level)
+    
+    # Draw the right branch
+    draw_pythagoras_tree(ax, x_end, y_end, angle - np.pi / 4, new_length, level + 1, max_level)
 
-    # Position the turtle for the right branch
-    t.right(90)
-    draw_pythagoras_tree(t, next_branch_length, level - 1)
+def plot_pythagoras_tree(max_level):
+    _, ax = plt.subplots()
+    ax.set_aspect('equal')
+    ax.axis('off')
 
-    # Move the turtle back to the original position
-    t.left(45)
-    t.forward(branch_length)
-    t.right(90)
-    t.forward(branch_length)
-    t.right(90)
+    draw_pythagoras_tree(ax, 0, 0, np.pi / 2, 1, 1, max_level)
 
-def main():
-    level = int(input("Enter the level of recursion: "))
+    plt.show()
 
-    screen = turtle.Screen()
-    screen.title("Pythagoras Tree")
-
-    t = turtle.Turtle()
-    t.speed('fastest')
-    t.penup()
-    t.goto(-100, -100)
-    t.pendown()
-
-    draw_pythagoras_tree(t, 100, level)
-
-    turtle.done()
-
-if __name__ == "__main__":
-    main()
+recursion_level = int(input("Enter the recursion level: "))
+plot_pythagoras_tree(recursion_level)
